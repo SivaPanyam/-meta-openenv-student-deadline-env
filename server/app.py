@@ -1,16 +1,16 @@
 import uvicorn
 import os
 from typing import Dict, List, Literal
-from fastapi import FastAPI
-from fastapi import HTTPException
+
+from fastapi import FastAPI, HTTPException
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field
 from openenv.core.env_server import HTTPEnvServer
+
 from assignment_deadline_env.env import AssignmentDeadlineEnv
-from assignment_deadline_env.models import Action, Observation
-from assignment_deadline_env.models import Task
 from assignment_deadline_env.grader import AssignmentGrader, compute_reward
+from assignment_deadline_env.models import Action, Observation, Task
 
 # Create FastAPI app
 app = FastAPI(title="Student Assignment Manager", version="1.0.0")
@@ -19,7 +19,7 @@ app = FastAPI(title="Student Assignment Manager", version="1.0.0")
 server = HTTPEnvServer(
     env=AssignmentDeadlineEnv,
     action_cls=Action,
-    observation_cls=Observation
+    observation_cls=Observation,
 )
 
 # Register the server routes on the app
@@ -28,7 +28,7 @@ server.register_routes(app)
 STATIC_DIR = os.path.join(os.path.dirname(__file__), "static")
 app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")
 
-# Add a health check endpoint
+
 @app.get("/")
 def health_check():
     return FileResponse(os.path.join(STATIC_DIR, "index.html"))
