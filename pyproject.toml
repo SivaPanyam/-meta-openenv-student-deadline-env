@@ -1,0 +1,21 @@
+[project]
+name = "assignment-deadline-env"
+version = "1.0.0"
+description = "A standardized environment for evaluating agentic prioritization and time-management skills against academic deadlines."
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "openenv-core",
+    "pydantic>=2.0.0",
+    "fastapi",
+    "uvicorn",
+    "python-dotenv",
+    "openai"
+]
+
+[project.scripts]
+server = "server.app:main"
+
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"

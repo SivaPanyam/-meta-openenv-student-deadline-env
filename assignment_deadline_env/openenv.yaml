@@ -1,0 +1,12 @@
+name: assignment-deadline-env
+version: 1.0.0
+description: "A time-management environment for completing academic assignments against deadlines."
+action: Action
+observation: Observation
+runtime: python
+port: 8000
+entrypoint: "env.AssignmentDeadlineEnv"
+# Optional: metadata for agent evaluation
+metadata:
+  max_steps: 48
+  task_category: "time_management"

@@ -1,0 +1,12 @@
+name: "AssignmentDeadlineManager"
+description: "A standardized environment for evaluating agentic prioritization and time-management skills against academic deadlines."
+version: "1.0.0"
+entrypoint: "assignment_deadline_env.env:AssignmentDeadlineEnv"
+action: "Action"
+observation: "Observation"
+runtime: "python"
+port: 8000
+metadata:
+  scenarios: ["easy", "medium", "hard"]
+  task_type: "selection_and_prioritization"
+  reward_range: [0.0, 1.0]

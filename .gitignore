@@ -1,0 +1,25 @@
+# Python
+venv/
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Environment & Secrets
+.env
+.env.local
+
+# Build & OS
+dist/
+build/
+*.egg-info/
+.DS_Store
+Thumbs.db
+
+# OpenEnv Temporary
+logs/
+.openenv/
