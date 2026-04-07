@@ -1,28 +1,29 @@
-# Use official Python 3.10 slim image for a smaller footprint
+# Use official Python 3.10 slim image
 FROM python:3.10-slim
 
 # Set environment variables
-ENV PYTHONDONTWRITEBYTECODE 1
-ENV PYTHONUNBUFFERED 1
-# Ensure the current directory is in the PYTHONPATH for package imports
-ENV PYTHONPATH="/app:${PYTHONPATH}"
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
+ENV PYTHONPATH="/app"
 
 # Set work directory
 WORKDIR /app
 
-# Install system dependencies (required for some Python packages)
+# Install system dependencies
 RUN apt-get update && apt-get install -y --no-install-recommends \
     gcc \
     libc6-dev \
     && rm -rf /var/lib/apt/lists/*
 
-# Install python dependencies
-# Copy requirements first to leverage Docker layer caching
-COPY assignment_deadline_env/requirements.txt .
+# Copy requirements file first from the root
+COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy the rest of the project files
+# Copy EVERYTHING else
 COPY . .
 
-# Default command to run the evaluation loop
-CMD ["python", "inference.py"]
+# Expose the standard Hugging Face Spaces port
+EXPOSE 7860
+
+# Default command starts the OpenEnv server
+CMD ["python", "server/app.py"]
