@@ -8,7 +8,7 @@ class AssignmentGrader:
         self.total_importance = sum(task.importance for task in tasks)
 
     def compute_score(self, selected_task_ids: List[int], time_allocation: Dict[int, int]) -> float:
-        if not selected_task_ids: return 0.0
+        if not selected_task_ids: return 0.01
         selected_set = set(selected_task_ids)
         
         # 1. Binary Completion Check
@@ -23,7 +23,7 @@ class AssignmentGrader:
                     if task.difficulty >= 4: total_difficult_tasks += 1
 
         # 2. Importance Score
-        importance_score = (completed_importance / self.total_importance) if self.total_importance > 0 else 0.0
+        importance_score = (completed_importance / self.total_importance) if self.total_importance > 0 else 0.01
         
         # 3. Urgency Penalty
         urgency_penalty = 0.0
@@ -35,9 +35,9 @@ class AssignmentGrader:
         total_time = sum(time_allocation.values())
         if total_time > self.available_hours:
             overage_penalty = (total_time - self.available_hours) / self.available_hours
-            efficiency_score = max(0.0, 1.0 - (overage_penalty * 2))
+            efficiency_score = max(0.01, 1.0 - (overage_penalty * 2))
         else:
-            efficiency_score = 1.0
+            efficiency_score = 0.99
 
         # 5. Cognitive Load
         switching_cost = max(0.0, (len(selected_set) - 3) * 0.1)
@@ -47,7 +47,9 @@ class AssignmentGrader:
         final = (importance_score * 0.7) + (efficiency_score * 0.3)
         final = final - urgency_penalty - switching_cost - fatigue_cost
         
-        return round(max(0.0, min(1.0, final)), 2)
+        # Ensure score is strictly between (0, 1)
+        final = max(0.01, min(0.99, final))
+        return round(final, 2)
 
 def compute_reward(score: float, is_done: bool) -> Reward:
-    return Reward(reward=score if is_done else 0.0)
+    return Reward(reward=score if is_done else 0.01)

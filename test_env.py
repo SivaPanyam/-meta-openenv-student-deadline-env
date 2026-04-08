@@ -26,13 +26,13 @@ def test_environment():
     
     # 6. Print Results
     print("\n--- 4. Step Results ---")
-    print(f"New Observation: Available Hours = {result.observation.available_hours} (One-shot environment)")
-    print(f"Reward: {result.reward:.2f} (Expected: 0.0 - 1.0)")
+    print(f"New Observation: Available Hours = {result.available_hours} (One-shot environment)")
+    print(f"Reward: {result.reward:.2f} (Expected: 0 < reward < 1)")
     print(f"Done: {result.done} (Type: {type(result.done).__name__})")
-    print(f"Info: {json.dumps(result.info)}")
+    print(f"Metadata: {json.dumps(result.metadata)}")
 
-    # Basic Validation
-    assert 0.0 <= result.reward <= 1.0, f"Reward {result.reward} out of range!"
+    # Basic Validation - rewards must be strictly between 0 and 1
+    assert 0 < result.reward < 1, f"Reward {result.reward} out of valid range (0, 1)!"
     assert isinstance(result.done, bool), "Done flag must be a boolean!"
     print("\nVerification Successful: Environment behaves as expected.")
 
