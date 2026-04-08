@@ -12,6 +12,15 @@ HF_TOKEN = os.getenv("HF_TOKEN")
 
 client = OpenAI(base_url=API_BASE_URL, api_key=HF_TOKEN)
 
+
+def normalize_strict_score(value: float) -> float:
+    """Clamp scores to strict open interval (0, 1)."""
+    try:
+        numeric = float(value)
+    except (TypeError, ValueError):
+        numeric = 0.5
+    return max(0.01, min(0.99, numeric))
+
 def clean_json_output(content):
     """Extracts a JSON object from a string if it's wrapped in markers or explanation."""
     match = re.search(r"\{.*\}", content, re.DOTALL)
@@ -68,12 +77,12 @@ def evaluate(scenario_name: str):
         action = Action(selected_task_ids=selected_ids, time_allocation=time_allocation)
         result = env.step(action)
         
-        reward = result.reward if result.reward is not None else 0.0
+        reward = normalize_strict_score(result.reward if result.reward is not None else 0.01)
         done = result.done
         
         # Access metadata from observation. If missing, default to 0.0 score
         metadata = getattr(result, "metadata", {}) or {}
-        score = metadata.get("score", 0.0)
+        score = normalize_strict_score(metadata.get("score", reward))
         success = score >= 0.8
         total_rewards.append(reward)
         
@@ -84,8 +93,9 @@ def evaluate(scenario_name: str):
 
     except Exception as e:
         error_msg = str(e).replace("\n", " ")
-        print(f"[STEP] step={step_num} action=[] reward=0.00 done=true error={error_msg}")
-        print(f"[END] success=false steps={step_num} score=0.00 rewards=0.00")
+        safe_reward = normalize_strict_score(0.01)
+        print(f"[STEP] step={step_num} action=[] reward={safe_reward:.2f} done=true error={error_msg}")
+        print(f"[END] success=false steps={step_num} score={safe_reward:.2f} rewards={safe_reward:.2f}")
 
 if __name__ == "__main__":
     for scenario in ["easy", "medium", "hard"]:

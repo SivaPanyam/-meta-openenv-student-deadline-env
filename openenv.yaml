@@ -9,4 +9,4 @@ port: 8000
 metadata:
   scenarios: ["easy", "medium", "hard"]
   task_type: "selection_and_prioritization"
-  reward_range: [0.0, 1.0]
+  reward_range: [0.01, 0.99]
