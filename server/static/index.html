@@ -1,0 +1,248 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Assignment Manager</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+
+<body>
+    <div class="bg-glow bg-glow-a" aria-hidden="true"></div>
+    <div class="bg-glow bg-glow-b" aria-hidden="true"></div>
+
+    <main class="app-shell">
+        <header class="hero">
+            <p class="eyebrow">OpenEnv Playground</p>
+            <h1>Student Assignment Manager</h1>
+            <p class="subtitle">Plan task allocations, run one episode, and inspect rewards instantly.</p>
+        </header>
+
+        <section class="panel controls-panel">
+            <h2>Episode Controls</h2>
+            <div class="row">
+                <label for="mode">Mode</label>
+                <select id="mode">
+                    <option value="scenario" selected>Preset Scenario</option>
+                    <option value="custom">Custom Tasks</option>
+                </select>
+            </div>
+            <div class="row">
+                <label for="scenario">Scenario</label>
+                <select id="scenario">
+                    <option value="easy">easy</option>
+                    <option value="medium" selected>medium</option>
+                    <option value="hard">hard</option>
+                </select>
+            </div>
+
+            <div id="customConfig" class="custom-config hidden">
+                <div class="row compact-row">
+                    <label for="customHours">Hours</label>
+                    <input id="customHours" type="number" min="1" max="24" value="10">
+                </div>
+                <div class="row compact-row">
+                    <label for="customEnergy">Energy</label>
+                    <select id="customEnergy">
+                        <option value="low">low</option>
+                        <option value="medium" selected>medium</option>
+                        <option value="high">high</option>
+                    </select>
+                </div>
+                <div class="row compact-row">
+                    <label for="customTimeOfDay">Time</label>
+                    <select id="customTimeOfDay">
+                        <option value="morning">morning</option>
+                        <option value="afternoon" selected>afternoon</option>
+                        <option value="night">night</option>
+                    </select>
+                </div>
+                <div class="row compact-row">
+                    <label for="customExamWeek">Exam Week</label>
+                    <select id="customExamWeek">
+                        <option value="false" selected>false</option>
+                        <option value="true">true</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="actions">
+                <button id="resetBtn" class="btn btn-primary">Reset Episode</button>
+                <button id="addTaskBtn" class="btn btn-secondary hidden">Add Task</button>
+                <button id="clearTasksBtn" class="btn btn-secondary hidden">Clear Tasks</button>
+                <button id="autofillBtn" class="btn btn-secondary" disabled>Auto-fill Plan</button>
+                <button id="runStepBtn" class="btn btn-accent" disabled>Run Step</button>
+            </div>
+            <p id="status" class="status">Status: waiting for reset</p>
+        </section>
+
+        <section class="panel observation-panel">
+            <h2>Current Observation</h2>
+            <div class="meta-grid" id="metaGrid">
+                <div class="meta-item"><span>Available Hours</span><strong id="availableHours">-</strong></div>
+                <div class="meta-item"><span>Energy</span><strong id="energyLevel">-</strong></div>
+                <div class="meta-item"><span>Time of Day</span><strong id="timeOfDay">-</strong></div>
+                <div class="meta-item"><span>Exam Week</span><strong id="examWeek">-</strong></div>
+            </div>
+            <div id="taskComposer" class="task-composer hidden">
+                <h3>Task Composer</h3>
+                <div class="composer-grid">
+                    <input id="newTaskTitle" type="text" placeholder="Task title">
+                    <input id="newTaskDeadline" type="number" min="1" placeholder="Deadline (hours)">
+                    <input id="newTaskDifficulty" type="number" min="1" max="5" placeholder="Difficulty (1-5)">
+                    <input id="newTaskEstimated" type="number" min="1" placeholder="Estimated time (hours)">
+                    <input id="newTaskImportance" type="number" min="1" max="5" placeholder="Importance (1-5)">
+                </div>
+            </div>
+            <div class="task-list" id="taskList"></div>
+        </section>
+
+        <section class="panel output-panel">
+            <h2>Result</h2>
+            <div class="output-grid">
+                <article>
+                    <h3>Action Payload</h3>
+                    <pre id="actionPayload">{}</pre>
+                </article>
+                <article>
+                    <h3>Step Response</h3>
+                    <pre id="stepResponse">{}</pre>
+                </article>
+            </div>
+        </section>
+    </main>
+
+    <script src="/static/app.js"></script>
+</body>
+
+</html>
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Assignment Manager</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+
+<body>
+    <div class="bg-glow bg-glow-a" aria-hidden="true"></div>
+    <div class="bg-glow bg-glow-b" aria-hidden="true"></div>
+
+    <main class="app-shell">
+        <header class="hero">
+            <p class="eyebrow">OpenEnv Playground</p>
+            <h1>Student Assignment Manager</h1>
+            <p class="subtitle">Plan task allocations, run one episode, and inspect rewards instantly.</p>
+        </header>
+
+        <section class="panel controls-panel">
+            <h2>Episode Controls</h2>
+            <div class="row">
+                <label for="mode">Mode</label>
+                <select id="mode">
+                    <option value="scenario" selected>Preset Scenario</option>
+                    <option value="custom">Custom Tasks</option>
+                </select>
+            </div>
+            <div class="row">
+                <label for="scenario">Scenario</label>
+                <select id="scenario">
+                    <option value="easy">easy</option>
+                    <option value="medium" selected>medium</option>
+                    <option value="hard">hard</option>
+                </select>
+            </div>
+
+            <div id="customConfig" class="custom-config hidden">
+                <div class="row compact-row">
+                    <label for="customHours">Hours</label>
+                    <input id="customHours" type="number" min="1" max="24" value="10">
+                </div>
+                <div class="row compact-row">
+                    <label for="customEnergy">Energy</label>
+                    <select id="customEnergy">
+                        <option value="low">low</option>
+                        <option value="medium" selected>medium</option>
+                        <option value="high">high</option>
+                    </select>
+                </div>
+                <div class="row compact-row">
+                    <label for="customTimeOfDay">Time</label>
+                    <select id="customTimeOfDay">
+                        <option value="morning">morning</option>
+                        <option value="afternoon" selected>afternoon</option>
+                        <option value="night">night</option>
+                    </select>
+                </div>
+                <div class="row compact-row">
+                    <label for="customExamWeek">Exam Week</label>
+                    <select id="customExamWeek">
+                        <option value="false" selected>false</option>
+                        <option value="true">true</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="actions">
+                <button id="resetBtn" class="btn btn-primary">Reset Episode</button>
+                <button id="addTaskBtn" class="btn btn-secondary hidden">Add Task</button>
+                <button id="clearTasksBtn" class="btn btn-secondary hidden">Clear Tasks</button>
+                <button id="autofillBtn" class="btn btn-secondary" disabled>Auto-fill Plan</button>
+                <button id="runStepBtn" class="btn btn-accent" disabled>Run Step</button>
+            </div>
+            <p id="status" class="status">Status: waiting for reset</p>
+        </section>
+
+        <section class="panel observation-panel">
+            <h2>Current Observation</h2>
+            <div class="meta-grid" id="metaGrid">
+                <div class="meta-item"><span>Available Hours</span><strong id="availableHours">-</strong></div>
+                <div class="meta-item"><span>Energy</span><strong id="energyLevel">-</strong></div>
+                <div class="meta-item"><span>Time of Day</span><strong id="timeOfDay">-</strong></div>
+                <div class="meta-item"><span>Exam Week</span><strong id="examWeek">-</strong></div>
+            </div>
+            <div id="taskComposer" class="task-composer hidden">
+                <h3>Task Composer</h3>
+                <div class="composer-grid">
+                    <input id="newTaskTitle" type="text" placeholder="Task title">
+                    <input id="newTaskDeadline" type="number" min="1" placeholder="Deadline (hours)">
+                    <input id="newTaskDifficulty" type="number" min="1" max="5" placeholder="Difficulty (1-5)">
+                    <input id="newTaskEstimated" type="number" min="1" placeholder="Estimated time (hours)">
+                    <input id="newTaskImportance" type="number" min="1" max="5" placeholder="Importance (1-5)">
+                </div>
+            </div>
+            <div class="task-list" id="taskList"></div>
+        </section>
+
+        <section class="panel output-panel">
+            <h2>Result</h2>
+            <div class="output-grid">
+                <article>
+                    <h3>Action Payload</h3>
+                    <pre id="actionPayload">{}</pre>
+                </article>
+                <article>
+                    <h3>Step Response</h3>
+                    <pre id="stepResponse">{}</pre>
+                </article>
+            </div>
+        </section>
+    </main>
+
+    <script src="/static/app.js"></script>
+</body>
+
+</html>
